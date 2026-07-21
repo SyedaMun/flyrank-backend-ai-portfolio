@@ -1,50 +1,73 @@
-# Navigant Education Consultants Task Management REST API
+# 🚀 Navigant Education Consultants Task Management REST API
 
-## Project Overview
-
-This project is a RESTful CRUD API developed using **Node.js** and **Express.js** as part of the **FlyRank Backend AI Engineering Internship (Week 2 – Assignment 1)**.
-
-Rather than using generic sample data, the API was customized with realistic operational tasks from **Navigant Education Consultants**, demonstrating practical backend development skills through education, career development, and AI empowerment workflows aligned with:
-
-- SDG 4 – Quality Education
-- SDG 5 – Gender Equality
-
-The project also includes professional API documentation using **OpenAPI (Swagger UI)** for interactive endpoint testing.
+> A RESTful CRUD API built with **Node.js**, **Express.js**, and **Swagger UI** as part of the **FlyRank Backend AI Engineering Internship (2026)**.
 
 ---
 
-## Features
+# 📖 Project Overview
 
-- RESTful CRUD API
-- Express.js backend server
-- JSON request and response handling
-- In-memory task management
-- Interactive Swagger UI documentation
-- Browser testing
-- Postman API testing
-- Route parameter handling
-- Basic backend debugging and troubleshooting
-- Real-world business sample data
+This project was developed during **Week 2 – Backend AI Engineering Assignment 1** of the FlyRank AI Internship.
+
+Instead of using generic sample data, the API was customized with realistic operational workflows from **Navigant Education Consultants**, demonstrating how backend APIs can support education, career development, and AI empowerment initiatives aligned with:
+
+- 🎓 **SDG 4 – Quality Education**
+- 👩‍💼 **SDG 5 – Gender Equality**
+
+The project demonstrates the complete development lifecycle of a beginner-friendly RESTful API, including development, testing, debugging, documentation, version control, and GitHub portfolio management.
 
 ---
 
-## Technologies Used
+# ✨ Features
 
-- Node.js
-- Express.js
-- JavaScript
-- REST API
-- JSON
-- Swagger UI
-- OpenAPI 3.0
-- Postman
-- Git
-- GitHub
-- Visual Studio Code
+- ✅ RESTful CRUD API
+- ✅ Express.js Server
+- ✅ JSON Request & Response Handling
+- ✅ In-Memory Data Storage
+- ✅ Interactive Swagger UI Documentation
+- ✅ Browser Testing
+- ✅ Postman API Testing
+- ✅ Route Parameters (`:id`)
+- ✅ API Debugging & Troubleshooting
+- ✅ Git Version Control
+- ✅ GitHub Repository Management
+- ✅ Real-world Educational Workflow Sample Data
 
 ---
 
-## API Endpoints
+# 🛠 Technology Stack
+
+| Technology | Purpose |
+|------------|---------|
+| Node.js | JavaScript Runtime |
+| Express.js | Backend Framework |
+| JavaScript | Programming Language |
+| REST API | API Architecture |
+| JSON | Data Exchange |
+| Swagger UI | Interactive API Documentation |
+| OpenAPI 3.0 | API Specification |
+| Postman | API Testing |
+| Git | Version Control |
+| GitHub | Source Code Repository |
+| VS Code | Development Environment |
+
+---
+
+# 📂 Project Structure
+
+```text
+flyrank-crud-api
+│
+├── .gitignore
+├── README.md
+├── server.js
+├── package.json
+├── package-lock.json
+└── openapi.json
+```
+
+---
+
+# 🔗 API Endpoints
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
@@ -52,51 +75,37 @@ The project also includes professional API documentation using **OpenAPI (Swagge
 | POST | `/tasks` | Create a new task |
 | PUT | `/tasks/:id` | Update an existing task |
 | DELETE | `/tasks/:id` | Delete a task |
-| GET | `/docs` | Interactive Swagger UI documentation |
+| GET | `/docs` | Interactive Swagger UI Documentation |
 
 ---
 
-## Project Structure
+# 🚀 Getting Started
 
-```
-flyrank-crud-api
-│
-├── server.js
-├── package.json
-├── package-lock.json
-├── openapi.json
-└── README.md
-```
-
----
-
-## Getting Started
-
-### Clone the repository
+## Clone Repository
 
 ```bash
 git clone https://github.com/SyedaMun/flyrank-crud-api.git
 ```
 
-### Install dependencies
+## Install Dependencies
 
 ```bash
 npm install
 ```
 
-### Start the server
+## Start Server
 
 ```bash
 node server.js
 ```
 
-The application will run at:
+Server:
 
 ```
 http://localhost:3000/tasks
 ```
 
-Swagger documentation is available at:
+Swagger Documentation:
 
 ```
 http://localhost:3000/docs
@@ -104,21 +113,21 @@ http://localhost:3000/docs
 
 ---
 
-## Testing
+# 🧪 Testing
 
-The API was successfully tested using:
+The project was successfully tested using:
 
-- Browser
-- Postman
-- Swagger UI ("Try it out")
+- ✅ Browser Testing
+- ✅ Postman
+- ✅ Swagger UI ("Try it out")
 
 All CRUD endpoints were verified successfully.
 
 ---
 
-## Learning Outcomes
+# 🎯 Learning Outcomes
 
-This project strengthened practical knowledge of:
+Through this project, I gained practical experience with:
 
 - Backend application setup
 - Express.js fundamentals
@@ -126,17 +135,25 @@ This project strengthened practical knowledge of:
 - CRUD operations
 - Route parameters
 - JSON request handling
-- API testing
-- Debugging techniques
-- OpenAPI documentation
+- API debugging
+- OpenAPI / Swagger documentation
 - Git version control
-- GitHub repository management
+- GitHub workflow
+- Professional repository management
 
 ---
 
-## Future Improvements
+# 🛣 Roadmap
 
-Future versions of this project will include:
+### ✅ Completed
+
+- RESTful CRUD API
+- Swagger UI Documentation
+- GitHub Repository
+- API Testing
+- Project Documentation
+
+### 🔄 Planned
 
 - Layered Architecture
 - SQLite Database Integration
@@ -144,17 +161,25 @@ Future versions of this project will include:
 - Docker Containerization
 - Authentication & Authorization
 - Persistent Data Storage
-- Production Deployment
+- Cloud Deployment
 
 ---
 
-## Author
+# 👩‍💻 Author
 
 **Syeda Munazza Bukhari**
 
 Founder — Navigant Education Consultants
 
-FlyRank Backend AI Engineering Intern (2026)
+Backend AI Engineering Intern — FlyRank AI Internship (2026)
+
+Building practical AI and backend solutions that support education, career development, and digital empowerment.
 
 GitHub:
 https://github.com/SyedaMun
+
+---
+
+# 🙏 Acknowledgements
+
+Developed as part of the **FlyRank Backend AI Engineering Internship (2026)** to strengthen practical backend engineering skills through hands-on project development.
