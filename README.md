@@ -6,9 +6,7 @@
 
 # 📖 Project Overview
 
-This project was developed during **Week 2 – Backend AI Engineering Assignment 1** of the FlyRank AI Internship.
-
-Instead of using generic sample data, the API was customized with realistic operational workflows from **Navigant Education Consultants**, demonstrating how backend APIs can support education, career development, and AI empowerment initiatives aligned with:
+This project was originally developed during Week 2 – Backend AI Engineering Assignment 1 and enhanced during Week 3 by migrating the CRUD API from in-memory storage to a persistent SQLite database.
 
 - 🎓 **SDG 4 – Quality Education**
 - 👩‍💼 **SDG 5 – Gender Equality**
@@ -22,7 +20,11 @@ The project demonstrates the complete development lifecycle of a beginner-friend
 - ✅ RESTful CRUD API
 - ✅ Express.js Server
 - ✅ JSON Request & Response Handling
-- ✅ In-Memory Data Storage
+- ✅ SQLite Persistent Database Storage
+- ✅ Automatic Database Initialization
+- ✅ Automatic Table Creation
+- ✅ Automatic Default Data Seeding
+- ✅ Parameterized SQL Queries
 - ✅ Interactive Swagger UI Documentation
 - ✅ Browser Testing
 - ✅ Postman API Testing
@@ -49,7 +51,32 @@ The project demonstrates the complete development lifecycle of a beginner-friend
 | Git | Version Control |
 | GitHub | Source Code Repository |
 | VS Code | Development Environment |
+| SQLite | Persistent Embedded Database |
+| sqlite3 | SQLite Driver for Node.js |
+| DB Browser for SQLite | Database Inspection & SQL Execution |
 
+# 🗄 SQLite Database
+
+## Why SQLite?
+
+SQLite was selected because it is a lightweight, serverless relational database that is ideal for beginner backend applications. It stores data in a single local database file while supporting standard SQL queries and persistent data storage.
+
+## Database Location
+
+The SQLite database file is stored in the project root:
+
+```text
+flyrank-crud-api/
+└── tasks.db
+```
+
+## Automatic Initialization
+
+When the application starts:
+
+- The database file is created automatically if it does not exist.
+- The `tasks` table is created automatically if it does not exist.
+- Three default sample tasks are inserted only when the table is empty.
 ---
 
 # 📂 Project Structure
@@ -60,6 +87,8 @@ flyrank-crud-api
 ├── .gitignore
 ├── README.md
 ├── server.js
+├── database.js
+├── tasks.db
 ├── package.json
 ├── package-lock.json
 └── openapi.json
@@ -98,7 +127,7 @@ npm install
 ```bash
 node server.js
 ```
-
+> **Note:** On the first startup, the application automatically creates the `tasks.db` SQLite database, creates the `tasks` table if it does not exist, and seeds three default sample tasks when the database is empty.
 Server:
 
 ```
@@ -164,6 +193,25 @@ Through this project, I gained practical experience with:
 - Cloud Deployment
 
 ---
+# 🧪 Example SQL Query
+
+During development, the following SQL query was executed manually using **DB Browser for SQLite** to inspect the database:
+
+```sql
+SELECT * FROM tasks;
+```
+
+This query displays every record stored in the `tasks` table and was used to verify database persistence throughout the project.
+
+# 📸 Database Screenshot
+
+The SQLite database was inspected and tested using **DB Browser for SQLite** during development.
+
+Example:
+
+![SQLite Database](images/database-browser.png)
+
+> Replace the image path with your uploaded database screenshot after adding it to the repository.
 
 # 👩‍💻 Author
 

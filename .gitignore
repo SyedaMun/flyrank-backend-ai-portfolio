@@ -1,21 +1,43 @@
+# ==========================================
+# FlyRank Backend AI Engineering Internship
+# .gitignore
+# ==========================================
+
 # Dependencies
 node_modules/
 
-# Database Files (Keeps local data private; we submit via screenshot)
-tasks.db
-*.db-journal
-
-# Environment variables
+# Environment Variables
 .env
+.env.*
 
 # Logs
+logs/
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Operating System files
+# Operating System Files
 .DS_Store
 Thumbs.db
 
-# IDE settings
+# IDE / Editor
 .vscode/
+.idea/
+
+# SQLite Temporary Files
+*.db-journal
+*.sqlite-journal
+
+# Build / Coverage
+dist/
+build/
+coverage/
+
+# Runtime
+*.pid
+*.seed
+
+# Miscellaneous
+*.tmp
+*.temp
