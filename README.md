@@ -181,6 +181,9 @@ Through this project, I gained practical experience with:
 - GitHub Repository
 - API Testing
 - Project Documentation
+- SQLite Database Integration
+- Persistent Database Storage
+- Manual SQL Queries
 
 ### 🔄 Planned
 
