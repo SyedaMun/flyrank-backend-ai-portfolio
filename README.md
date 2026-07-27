@@ -6,12 +6,59 @@
 
 # 📖 Project Overview
 
-This project was originally developed during Week 2 – Backend AI Engineering Assignment 1 and enhanced during Week 3 by migrating the CRUD API from in-memory storage to a persistent SQLite database.
+
+This repository documents the continuous evolution of a backend application developed throughout the **FlyRank Backend AI Engineering Internship (2026)**.
+
+The project began as a simple RESTful CRUD API and is being enhanced incrementally through weekly backend engineering assignments. Each assignment introduces new technologies, architectural improvements, and engineering practices while building upon the previous implementation.
+
+Instead of creating separate repositories for each assignment, this project demonstrates the complete engineering journey—from a beginner-friendly CRUD API to a production-oriented backend application.
+
+The application is customized with realistic operational workflows from **Navigant Education Consultants**, illustrating how backend technologies can support education, career development, and AI-powered digital solutions aligned with:
 
 - 🎓 **SDG 4 – Quality Education**
 - 👩‍💼 **SDG 5 – Gender Equality**
 
-The project demonstrates the complete development lifecycle of a beginner-friendly RESTful API, including development, testing, debugging, documentation, version control, and GitHub portfolio management.
+This repository showcases backend engineering concepts including API development, database integration, containerization, testing, documentation, version control, and modern software engineering practices.
+
+---
+
+# 🚀 Project Evolution
+
+This repository is maintained as a single, continuously evolving backend engineering project throughout the **FlyRank Backend AI Engineering Internship (2026)**. Each weekly assignment extends the existing application with new technologies and engineering practices, demonstrating progressive backend development skills.
+
+| Week | Backend AI Engineering Assignment | Status |
+|------|-----------------------------------|--------|
+| Week 2 | BE-01 — Build Your First CRUD API | ✅ Completed |
+| Week 3 | BE-02 — Connect CRUD API to SQLite | ✅ Completed |
+| Week 3 | BE-04 — Containerize Your Stack | 🔄 In Progress |
+| Week 4 | Authentication — Login & Protect | ⏳ Planned |
+| Week 5 | Connect to an AI API | ⏳ Planned |
+| Week 5 | The Polite Scraper | ⏳ Planned |
+| Week 6 | Your First Background Job | ⏳ Planned |
+| Week 7 | Build an AI Decision Flow with React Flow + Inngest | ⏳ Planned |
+| Week 7 | PDF Report Generator | ⏳ Planned |
+| Week 8 | Backend Capstone Documentation & Case Study | ⏳ Planned |
+
+---
+
+# 🏆 Engineering Skills Progression
+
+Throughout this internship, this repository demonstrates practical experience with:
+
+- ✅ REST API Design
+- ✅ CRUD Operations
+- ✅ Express.js
+- ✅ OpenAPI / Swagger Documentation
+- ✅ Git & GitHub Workflow
+- ✅ SQLite Database Integration
+- 🔄 Docker & Containerization
+- ⏳ Authentication & Authorization
+- ⏳ AI API Integration
+- ⏳ Web Scraping
+- ⏳ Background Jobs
+- ⏳ PDF Generation
+- ⏳ AI Workflow Orchestration
+- ⏳ Production Deployment
 
 ---
 
@@ -172,30 +219,6 @@ Through this project, I gained practical experience with:
 
 ---
 
-# 🛣 Roadmap
-
-### ✅ Completed
-
-- RESTful CRUD API
-- Swagger UI Documentation
-- GitHub Repository
-- API Testing
-- Project Documentation
-- SQLite Database Integration
-- Persistent Database Storage
-- Manual SQL Queries
-
-### 🔄 Planned
-
-- Layered Architecture
-- SQLite Database Integration
-- PostgreSQL Database
-- Docker Containerization
-- Authentication & Authorization
-- Persistent Data Storage
-- Cloud Deployment
-
----
 # 🧪 Example SQL Query
 
 During development, the following SQL query was executed manually using **DB Browser for SQLite** to inspect the database:
