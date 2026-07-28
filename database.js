@@ -69,7 +69,41 @@ async function seedDefaultTasks() {
     }
 }
 
-// Start database initialization
+// ==========================================
+// STAGE 2: READ OPERATIONS
+// ==========================================
+
+// Get all tasks
+async function getAllTasks() {
+    const result = await pool.query(
+        "SELECT * FROM tasks"
+    );
+
+    return result.rows;
+}
+
+// Get one task by ID
+async function getTaskById(id) {
+    const result = await pool.query(
+        "SELECT * FROM tasks WHERE id = $1",
+        [id]
+    );
+
+    return result.rows[0];
+}
+
+// ==========================================
+// START DATABASE INITIALIZATION
+// ==========================================
+
 initializeDatabase();
 
-module.exports = pool;
+// ==========================================
+// EXPORT DATABASE MODULE
+// ==========================================
+
+module.exports = {
+    pool,
+    getAllTasks,
+    getTaskById
+};

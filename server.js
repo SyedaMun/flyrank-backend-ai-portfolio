@@ -12,18 +12,16 @@ app.use(express.urlencoded({ extended: true }));
 const PORT = 3000;
 
 // ==========================================
-// STAGE 1: READ ENDPOINTS (GET)
+// STAGE 2: READ ENDPOINTS (GET)
 // ==========================================
 
 // GET All Tasks
 app.get("/tasks", async (req, res) => {
     try {
-        const result = await db.query(
-            "SELECT * FROM tasks ORDER BY id"
-        );
+        const rows = await db.getAllTasks();
 
         res.json(
-            result.rows.map(task => ({
+            rows.map(task => ({
                 id: task.id,
                 title: task.title,
                 completed: task.done === 1
@@ -40,18 +38,13 @@ app.get("/tasks", async (req, res) => {
 // GET Single Task
 app.get("/tasks/:id", async (req, res) => {
     try {
-        const result = await db.query(
-            "SELECT * FROM tasks WHERE id = $1",
-            [req.params.id]
-        );
+        const task = await db.getTaskById(req.params.id);
 
-        if (result.rows.length === 0) {
+        if (!task) {
             return res.status(404).json({
                 message: "Task not found"
             });
         }
-
-        const task = result.rows[0];
 
         res.json({
             id: task.id,
@@ -92,7 +85,7 @@ app.post("/tasks", async (req, res) => {
     const title = req.body.title.trim();
 
     try {
-        const result = await db.query(
+        const result = await db.pool.query(
             `INSERT INTO tasks (title, done)
              VALUES ($1, $2)
              RETURNING id`,
@@ -128,7 +121,7 @@ app.put("/tasks/:id", async (req, res) => {
     const done = req.body.completed ? 1 : 0;
 
     try {
-        const result = await db.query(
+        const result = await db.pool.query(
             `UPDATE tasks
              SET title = $1, done = $2
              WHERE id = $3`,
@@ -161,7 +154,7 @@ app.put("/tasks/:id", async (req, res) => {
 app.delete("/tasks/:id", async (req, res) => {
 
     try {
-        const result = await db.query(
+        const result = await db.pool.query(
             "DELETE FROM tasks WHERE id = $1",
             [req.params.id]
         );
