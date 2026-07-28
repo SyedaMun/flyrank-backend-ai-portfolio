@@ -5,6 +5,7 @@ const db = require("./database");
 // ==========================================
 // MIDDLEWARE
 // ==========================================
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -15,46 +16,54 @@ const PORT = 3000;
 // ==========================================
 
 // GET All Tasks
-app.get("/tasks", (req, res) => {
-    db.all("SELECT * FROM tasks", [], (err, rows) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
+app.get("/tasks", async (req, res) => {
+    try {
+        const result = await db.query(
+            "SELECT * FROM tasks ORDER BY id"
+        );
 
         res.json(
-            rows.map(task => ({
+            result.rows.map(task => ({
                 id: task.id,
                 title: task.title,
                 completed: task.done === 1
             }))
         );
-    });
+
+    } catch (err) {
+        res.status(500).json({
+            error: err.message
+        });
+    }
 });
 
 // GET Single Task
-app.get("/tasks/:id", (req, res) => {
-    db.get(
-        "SELECT * FROM tasks WHERE id = ?",
-        [req.params.id],
-        (err, row) => {
+app.get("/tasks/:id", async (req, res) => {
+    try {
+        const result = await db.query(
+            "SELECT * FROM tasks WHERE id = $1",
+            [req.params.id]
+        );
 
-            if (err) {
-                return res.status(500).json({ error: err.message });
-            }
-
-            if (!row) {
-                return res.status(404).json({
-                    message: "Task not found"
-                });
-            }
-
-            res.json({
-                id: row.id,
-                title: row.title,
-                completed: row.done === 1
+        if (result.rows.length === 0) {
+            return res.status(404).json({
+                message: "Task not found"
             });
         }
-    );
+
+        const task = result.rows[0];
+
+        res.json({
+            id: task.id,
+            title: task.title,
+            completed: task.done === 1
+        });
+
+    } catch (err) {
+        res.status(500).json({
+            error: err.message
+        });
+    }
 });
 
 // ==========================================
@@ -72,14 +81,7 @@ app.post("/test", (req, res) => {
 // STAGE 2: CREATE TASK (POST)
 // ==========================================
 
-app.post("/tasks", (req, res) => {
-
-    console.log("==========================================");
-    console.log("🔍 DIAGNOSTIC DEBUG LOG");
-    console.log("Raw Headers:", req.headers);
-    console.log("Parsed req.body Type:", typeof req.body);
-    console.log("Parsed req.body Contents:", req.body);
-    console.log("==========================================");
+app.post("/tasks", async (req, res) => {
 
     if (!req.body || !req.body.title || req.body.title.trim() === "") {
         return res.status(400).json({
@@ -89,32 +91,33 @@ app.post("/tasks", (req, res) => {
 
     const title = req.body.title.trim();
 
-    db.run(
-        "INSERT INTO tasks (title, done) VALUES (?, ?)",
-        [title, 0],
-        function (err) {
+    try {
+        const result = await db.query(
+            `INSERT INTO tasks (title, done)
+             VALUES ($1, $2)
+             RETURNING id`,
+            [title, 0]
+        );
 
-            if (err) {
-                return res.status(500).json({
-                    error: err.message
-                });
-            }
+        res.status(201).json({
+            id: result.rows[0].id,
+            title: title,
+            completed: false
+        });
 
-            res.status(201).json({
-                id: this.lastID,
-                title: title,
-                completed: false
-            });
-        }
-    );
+    } catch (err) {
+        res.status(500).json({
+            error: err.message
+        });
+    }
 });
 
 // ==========================================
-// STAGE 3: UPDATE & DELETE ENDPOINTS (PUT/DELETE)
+// STAGE 3: UPDATE TASK
 // ==========================================
 
-// PUT - Update a task title and completed state in the SQLite database
-app.put("/tasks/:id", (req, res) => {
+app.put("/tasks/:id", async (req, res) => {
+
     if (!req.body || !req.body.title || req.body.title.trim() === "") {
         return res.status(400).json({
             message: "Task title is required"
@@ -122,51 +125,66 @@ app.put("/tasks/:id", (req, res) => {
     }
 
     const title = req.body.title.trim();
-    // Convert incoming completed boolean (true/false) into SQLite integer (1/0)
-    const done = req.body.completed ? 1 : 0; 
+    const done = req.body.completed ? 1 : 0;
 
-    db.run(
-        "UPDATE tasks SET title = ?, done = ? WHERE id = ?",
-        [title, done, req.params.id],
-        function (err) {
-            if (err) {
-                return res.status(500).json({ error: err.message });
-            }
+    try {
+        const result = await db.query(
+            `UPDATE tasks
+             SET title = $1, done = $2
+             WHERE id = $3`,
+            [title, done, req.params.id]
+        );
 
-            // If zero rows were changed, it means the ID does not exist in the database
-            if (this.changes === 0) {
-                return res.status(404).json({ message: "Task not found" });
-            }
-
-            res.json({
-                id: Number(req.params.id),
-                title: title,
-                completed: req.body.completed === true
+        if (result.rowCount === 0) {
+            return res.status(404).json({
+                message: "Task not found"
             });
         }
-    );
+
+        res.json({
+            id: Number(req.params.id),
+            title: title,
+            completed: req.body.completed === true
+        });
+
+    } catch (err) {
+        res.status(500).json({
+            error: err.message
+        });
+    }
 });
 
-// DELETE - Remove a task from the SQLite database by ID
-app.delete("/tasks/:id", (req, res) => {
-    db.run(
-        "DELETE FROM tasks WHERE id = ?",
-        [req.params.id],
-        function (err) {
-            if (err) {
-                return res.status(500).json({ error: err.message });
-            }
+// ==========================================
+// STAGE 3: DELETE TASK
+// ==========================================
 
-            // If zero rows were changed, it means the ID does not exist
-            if (this.changes === 0) {
-                return res.status(404).json({ message: "Task not found" });
-            }
+app.delete("/tasks/:id", async (req, res) => {
 
-            res.json({ message: "Task deleted successfully" });
+    try {
+        const result = await db.query(
+            "DELETE FROM tasks WHERE id = $1",
+            [req.params.id]
+        );
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({
+                message: "Task not found"
+            });
         }
-    );
+
+        res.json({
+            message: "Task deleted successfully"
+        });
+
+    } catch (err) {
+        res.status(500).json({
+            error: err.message
+        });
+    }
 });
 
+// ==========================================
+// START SERVER
 // ==========================================
 
 app.listen(PORT, () => {
