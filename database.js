@@ -70,13 +70,13 @@ async function seedDefaultTasks() {
 }
 
 // ==========================================
-// STAGE 2: READ OPERATIONS
+// READ OPERATIONS
 // ==========================================
 
 // Get all tasks
 async function getAllTasks() {
     const result = await pool.query(
-        "SELECT * FROM tasks"
+        "SELECT * FROM tasks ORDER BY id"
     );
 
     return result.rows;
@@ -93,17 +93,68 @@ async function getTaskById(id) {
 }
 
 // ==========================================
+// CREATE OPERATION
+// ==========================================
+
+// Create a new task
+async function createTask(title) {
+    const result = await pool.query(
+        `INSERT INTO tasks (title, done)
+         VALUES ($1, $2)
+         RETURNING *`,
+        [title, 0]
+    );
+
+    return result.rows[0];
+}
+
+// ==========================================
+// UPDATE OPERATION
+// ==========================================
+
+// Update an existing task
+async function updateTask(id, title, done) {
+    const result = await pool.query(
+        `UPDATE tasks
+         SET title = $1, done = $2
+         WHERE id = $3
+         RETURNING *`,
+        [title, done, id]
+    );
+
+    return result.rows[0];
+}
+
+// ==========================================
+// DELETE OPERATION
+// ==========================================
+
+// Delete an existing task
+async function deleteTask(id) {
+    const result = await pool.query(
+        `DELETE FROM tasks
+         WHERE id = $1
+         RETURNING *`,
+        [id]
+    );
+
+    return result.rows[0];
+}
+
+// ==========================================
 // START DATABASE INITIALIZATION
 // ==========================================
 
 initializeDatabase();
 
 // ==========================================
-// EXPORT DATABASE MODULE
+// EXPORT DATABASE REPOSITORY
 // ==========================================
 
 module.exports = {
-    pool,
     getAllTasks,
-    getTaskById
+    getTaskById,
+    createTask,
+    updateTask,
+    deleteTask
 };

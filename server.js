@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 const PORT = 3000;
 
 // ==========================================
-// STAGE 2: READ ENDPOINTS (GET)
+// STAGE 2: READ ENDPOINTS
 // ==========================================
 
 // GET All Tasks
@@ -71,11 +71,13 @@ app.post("/test", (req, res) => {
 });
 
 // ==========================================
-// STAGE 2: CREATE TASK (POST)
+// STAGE 3: CREATE TASK
 // ==========================================
 
+// POST /tasks
 app.post("/tasks", async (req, res) => {
 
+    // Validation
     if (!req.body || !req.body.title || req.body.title.trim() === "") {
         return res.status(400).json({
             message: "Task title is required"
@@ -85,17 +87,12 @@ app.post("/tasks", async (req, res) => {
     const title = req.body.title.trim();
 
     try {
-        const result = await db.pool.query(
-            `INSERT INTO tasks (title, done)
-             VALUES ($1, $2)
-             RETURNING id`,
-            [title, 0]
-        );
+        const task = await db.createTask(title);
 
         res.status(201).json({
-            id: result.rows[0].id,
-            title: title,
-            completed: false
+            id: task.id,
+            title: task.title,
+            completed: task.done === 1
         });
 
     } catch (err) {
@@ -109,8 +106,10 @@ app.post("/tasks", async (req, res) => {
 // STAGE 3: UPDATE TASK
 // ==========================================
 
+// PUT /tasks/:id
 app.put("/tasks/:id", async (req, res) => {
 
+    // Validation
     if (!req.body || !req.body.title || req.body.title.trim() === "") {
         return res.status(400).json({
             message: "Task title is required"
@@ -118,26 +117,25 @@ app.put("/tasks/:id", async (req, res) => {
     }
 
     const title = req.body.title.trim();
-    const done = req.body.completed ? 1 : 0;
+    const done = req.body.completed === true ? 1 : 0;
 
     try {
-        const result = await db.pool.query(
-            `UPDATE tasks
-             SET title = $1, done = $2
-             WHERE id = $3`,
-            [title, done, req.params.id]
+        const task = await db.updateTask(
+            req.params.id,
+            title,
+            done
         );
 
-        if (result.rowCount === 0) {
+        if (!task) {
             return res.status(404).json({
                 message: "Task not found"
             });
         }
 
-        res.json({
-            id: Number(req.params.id),
-            title: title,
-            completed: req.body.completed === true
+        res.status(200).json({
+            id: task.id,
+            title: task.title,
+            completed: task.done === 1
         });
 
     } catch (err) {
@@ -151,23 +149,20 @@ app.put("/tasks/:id", async (req, res) => {
 // STAGE 3: DELETE TASK
 // ==========================================
 
+// DELETE /tasks/:id
 app.delete("/tasks/:id", async (req, res) => {
 
     try {
-        const result = await db.pool.query(
-            "DELETE FROM tasks WHERE id = $1",
-            [req.params.id]
-        );
+        const task = await db.deleteTask(req.params.id);
 
-        if (result.rowCount === 0) {
+        if (!task) {
             return res.status(404).json({
                 message: "Task not found"
             });
         }
 
-        res.json({
-            message: "Task deleted successfully"
-        });
+        // Successful DELETE returns 204 with no response body
+        res.status(204).send();
 
     } catch (err) {
         res.status(500).json({
