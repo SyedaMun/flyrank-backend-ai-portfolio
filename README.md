@@ -52,7 +52,7 @@ Each assignment extends the existing application rather than creating a complete
 | Week 2 | BE-01 — Build Your First CRUD API                   | ✅ Completed |
 | Week 3 | BE-02 — Connecting CRUD API to the Database         | ✅ Completed |
 | Week 3 | BE-04 — Containerize Your Stack                     | ✅ Completed |
-| Week 4 | Authentication — Login & Protect                    | ⏳ Planned   |
+| Week 4 | Authentication — Login & Protect                    | ✅ Completed |
 | Week 5 | Connect to an AI API                                | ⏳ Planned   |
 | Week 5 | The Polite Scraper                                  | ⏳ Planned   |
 | Week 6 | Your First Background Job                           | ⏳ Planned   |
@@ -1015,6 +1015,16 @@ The project also retains evidence from the earlier SQLite stage, where **DB Brow
 The project previously used SQLite during BE-02. The following screenshot documents that earlier database stage before the migration to PostgreSQL.
 
 ![SQLite Database](images/database-browser.png)
+
+# Authentication Infrastructure (Week 4 / BE-03 Update)
+The Task Management Engine features a modular token-based authentication subsystem leveraging the Supabase identity platform layer. Secure endpoints are guarded utilizing custom interceptive route middleware patterns.
+
+## Expanded Security Features
+* **User Provisioning Gateway (`POST /auth/signup`):** Handles input format checking and routes records into encrypted offsite database tables.
+* **Cryptographic Token Dispatched Desk (`POST /auth/login`):** Authorizes user identity details and issues standard JWT `access_token` and `refresh_token` envelopes.
+* **Session Deactivation Gate (`POST /auth/logout`):** Destroys active validation strings globally across cloud registries.
+* **Decoupled Verification Middleware (`authenticateUser`):** A reusable Express interceptor function that dynamically extracts bearer strings from request headers and parses validation states securely.
+* **Interactive Lock Integration:** OpenAPI spec configurations extended via `securitySchemes` to implement interactive lock controls across the Swagger UI browser dashboard layer.
 
 # 👩‍💻 Author
 
