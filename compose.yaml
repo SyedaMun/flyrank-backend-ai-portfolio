@@ -5,8 +5,11 @@ services:
       - "3000:3000"
     environment:
       DATABASE_URL: postgres://postgres:dev@db:5432/tasks
+      SUPABASE_URL: ${SUPABASE_URL}
+      SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY}
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   db:
     image: postgres:17
@@ -15,6 +18,11 @@ services:
       POSTGRES_DB: tasks
     volumes:
       - taskdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d tasks"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
 volumes:
   taskdata:

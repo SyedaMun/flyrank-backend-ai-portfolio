@@ -1,57 +1,185 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Navigant Education Consultants API",
+    "title": "Navigant Education Consultants Task Management API",
     "version": "1.0.0",
-    "description": "API for tracking community empowerment tasks focused on SDG 4 (Quality Education) and SDG 5 (Gender Equality)."
+    "description": "RESTful CRUD API for managing community education and empowerment tasks aligned with SDG 4 (Quality Education) and SDG 5 (Gender Equality). Enhanced with Supabase Auth Middleware security layers."
   },
   "servers": [
     {
       "url": "http://localhost:3000"
     }
   ],
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Please paste your raw access_token here to unlock the protected API gates."
+      }
+    }
+  },
   "paths": {
-    "/tasks": {
-      "get": {
-        "summary": "Get all Navigant tasks",
-        "responses": {
-          "200": {
-            "description": "A successful list of operations"
-          }
-        }
-      },
+    "/auth/signup": {
       "post": {
-        "summary": "Add a new community training task",
+        "summary": "User Registration Gate",
+        "description": "Registers a new member account with an email and password inside the Supabase cluster.",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
+                "required": ["email", "password"],
                 "properties": {
-                  "title": { "type": "string" },
-                  "category": { "type": "string" }
+                  "email": { "type": "string", "example": "student@example.com" },
+                  "password": { "type": "string", "example": "SecurePass123!" }
                 }
               }
             }
           }
         },
         "responses": {
-          "201": {
-            "description": "Task successfully created"
+          "201": { "description": "Account provisioned successfully." },
+          "400": { "description": "Validation input errors or duplicate entry block." }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "User Session Generation Desk",
+        "description": "Validates credentials and dispatches the required access_token and refresh_token session data.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "password"],
+                "properties": {
+                  "email": { "type": "string", "example": "student@example.com" },
+                  "password": { "type": "string", "example": "SecurePass123!" }
+                }
+              }
+            }
           }
+        },
+        "responses": {
+          "200": { "description": "Session authorized. Tokens dispatched cleanly." },
+          "401": { "description": "Authentication matching rejection." }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "summary": "Session Eviction Process",
+        "description": "Destroys the user session globally on the Supabase platform layers.",
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "204": { "description": "Session revoked cleanly on cloud registers." },
+          "401": { "description": "Token evaluation dropped or expired." }
+        }
+      }
+    },
+    "/public/info": {
+      "get": {
+        "summary": "Open Information Access",
+        "description": "Serves public gateway information that requires no security clearance.",
+        "responses": {
+          "200": { "description": "Public content payload delivered safely." }
+        }
+      }
+    },
+    "/protected/profile": {
+      "get": {
+        "summary": "Secure Identity Records Access",
+        "description": "Extracts the verified user metadata object matching the active signature pass.",
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Decrypted signature data extracted successfully." },
+          "401": { "description": "Security parsing drop checkpoint hit." }
+        }
+      }
+    },
+    "/protected/dashboard": {
+      "get": {
+        "summary": "Secure Analytical Monitoring Metrics",
+        "description": "Renders administrative system verification states for authorized accounts.",
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Administrative records rendered cleanly." },
+          "401": { "description": "Security parsing drop checkpoint hit." }
+        }
+      }
+    },
+    "/tasks": {
+      "get": {
+        "summary": "Get all tasks",
+        "description": "Returns all tasks from the database.",
+        "responses": {
+          "200": { "description": "Tasks retrieved successfully." },
+          "500": { "description": "Internal server error." }
+        }
+      },
+      "post": {
+        "summary": "Create a new task",
+        "description": "Creates a new task. The title is required. Protected by token authorization.",
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["title"],
+                "properties": {
+                  "title": { "type": "string", "example": "Prepare SDG 4 education workshop materials" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Task successfully created." },
+          "400": { "description": "Task title is required." },
+          "401": { "description": "Authentication token missing or invalid." },
+          "500": { "description": "Internal server error." }
         }
       }
     },
     "/tasks/{id}": {
-      "put": {
-        "summary": "Update an existing task status",
+      "get": {
+        "summary": "Get a task by ID",
+        "description": "Returns one task from the database using its ID.",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "integer" }
+            "description": "The ID of the task.",
+            "schema": { "type": "integer" },
+            "example": 8
+          }
+        ],
+        "responses": {
+          "200": { "description": "Task retrieved successfully." },
+          "404": { "description": "Task not found." },
+          "500": { "description": "Internal server error." }
+        }
+      },
+      "put": {
+        "summary": "Update a task",
+        "description": "Updates the title and completion status of an existing task. Protected by token authorization.",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the task.",
+            "schema": { "type": "integer" },
+            "example": 8
           }
         ],
         "requestBody": {
@@ -60,33 +188,42 @@
             "application/json": {
               "schema": {
                 "type": "object",
+                "required": ["title"],
                 "properties": {
-                  "completed": { "type": "boolean" }
+                  "title": { "type": "string", "example": "Prepare SDG 4 education workshop materials" },
+                  "completed": { "type": "boolean", "example": true }
                 }
               }
             }
           }
         },
         "responses": {
-          "200": {
-            "description": "Task successfully updated"
-          }
+          "200": { "description": "Task successfully updated." },
+          "400": { "description": "Task title is required." },
+          "401": { "description": "Authentication token missing or invalid." },
+          "404": { "description": "Task not found." },
+          "500": { "description": "Internal server error." }
         }
       },
       "delete": {
-        "summary": "Delete a completed task",
+        "summary": "Delete a task",
+        "description": "Deletes an existing task by ID. Protected by token authorization.",
+        "security": [{ "BearerAuth": [] }],
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "integer" }
+            "description": "The ID of the task.",
+            "schema": { "type": "integer" },
+            "example": 8
           }
         ],
         "responses": {
-          "200": {
-            "description": "Task successfully deleted"
-          }
+          "204": { "description": "Task successfully deleted. No response body is returned." },
+          "401": { "description": "Authentication token missing or invalid." },
+          "404": { "description": "Task not found." },
+          "500": { "description": "Internal server error." }
         }
       }
     }
