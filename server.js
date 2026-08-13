@@ -1,4 +1,8 @@
 const express = require("express");
+const swaggerUi = require("swagger-ui-express");
+const openapiSpecification = require("./openapi.json");
+const supabase = require("./supabase");
+
 const app = express();
 const db = require("./database");
 
@@ -12,7 +16,171 @@ app.use(express.urlencoded({ extended: true }));
 const PORT = 3000;
 
 // ==========================================
-// STAGE 2: READ ENDPOINTS
+// REUSABLE AUTHENTICATION MIDDLEWARE (STAGE 4)
+// ==========================================
+const authenticateUser = async (req, res, next) => {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        return res.status(401).json({
+            error: "Access token required"
+        });
+    }
+
+    const token = authHeader.split(" ")[1];
+
+    try {
+        const { data: { user }, error } = await supabase.auth.getUser(token);
+
+        if (error || !user) {
+            return res.status(401).json({
+                error: "Invalid or expired token"
+            });
+        }
+
+        // Attach user metadata onto the request object so downstream routes can see who it is
+        req.user = user;
+        
+        // Pass control safely to the next route function
+        next();
+
+    } catch (err) {
+        return res.status(401).json({
+            error: "Invalid or expired token"
+        });
+    }
+};
+
+// ==========================================
+// STAGE 1: AUTHENTICATION — SIGN UP
+// ==========================================
+
+// POST /auth/signup
+app.post("/auth/signup", async (req, res) => {
+    const { email, password } = req.body || {};
+
+    if (!email || !password) {
+        return res.status(400).json({
+            message: "Email and password are required"
+        });
+    }
+
+    try {
+        const { data, error } = await supabase.auth.signUp({
+            email,
+            password
+        });
+
+        if (error) {
+            return res.status(400).json({
+                message: error.message
+            });
+        }
+
+        return res.status(201).json({
+            user: data.user
+        });
+
+    } catch (err) {
+        return res.status(500).json({
+            message: "Internal server error"
+        });
+    }
+});
+
+// POST /auth/login
+app.post("/auth/login", async (req, res) => {
+    const { email, password } = req.body || {};
+
+    if (!email || !password) {
+        return res.status(400).json({
+            message: "Email and password are required"
+        });
+    }
+
+    try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email,
+            password
+        });
+
+        if (error) {
+            return res.status(401).json({
+                message: error.message
+            });
+        }
+
+        return res.status(200).json({
+            access_token: data.session.access_token,
+            refresh_token: data.session.refresh_token
+        });
+
+    } catch (err) {
+        return res.status(500).json({
+            message: "Internal server error"
+        });
+    }
+});
+
+// POST /auth/logout (STAGE 4 REQUIREMENT)
+app.post("/auth/logout", authenticateUser, async (req, res) => {
+    try {
+        // Sign out user session globally on Supabase cloud servers
+        const { error } = await supabase.auth.signOut();
+
+        if (error) {
+            return res.status(400).json({ error: error.message });
+        }
+
+        // Successful logouts send an HTTP 204 No Content back
+        return res.status(204).send();
+
+    } catch (err) {
+        return res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+// ==========================================
+// STAGE 2: PUBLIC GATEWAY
+// ==========================================
+
+// GET /public/info
+app.get("/public/info", (req, res) => {
+    return res.status(200).json({
+        message: "Welcome stranger! This info is public."
+    });
+});
+
+// ==========================================
+// STAGE 3 & 4: PROTECTED CHANNELS (NOW ROUTED VIA MIDDLEWARE)
+// ==========================================
+
+// GET /protected/profile
+app.get("/protected/profile", authenticateUser, (req, res) => {
+    // Because the middleware executes first, we can instantly access req.user safely!
+    return res.status(200).json({
+        id: req.user.id,
+        email: req.user.email,
+        created_at: req.user.created_at
+    });
+});
+
+// GET /protected/dashboard (STAGE 4 REQUIREMENT)
+app.get("/protected/dashboard", authenticateUser, (req, res) => {
+    return res.status(200).json({
+        message: `Welcome to your security dashboard, user ${req.user.email}!`,
+        status: "Active metrics rendering perfectly."
+    });
+});
+
+// ==========================================
+// SWAGGER API DOCUMENTATION
+// ==========================================
+
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(openapiSpecification));
+
+// ==========================================
+// STAGE 2: READ ENDPOINTS (KEEP PUBLIC)
 // ==========================================
 
 // GET All Tasks
@@ -71,13 +239,12 @@ app.post("/test", (req, res) => {
 });
 
 // ==========================================
-// STAGE 3: CREATE TASK
+// STAGE 3: CREATE TASK (PROTECTED FOR SECURITY)
 // ==========================================
 
 // POST /tasks
-app.post("/tasks", async (req, res) => {
+app.post("/tasks", authenticateUser, async (req, res) => {
 
-    // Validation
     if (!req.body || !req.body.title || req.body.title.trim() === "") {
         return res.status(400).json({
             message: "Task title is required"
@@ -103,13 +270,12 @@ app.post("/tasks", async (req, res) => {
 });
 
 // ==========================================
-// STAGE 3: UPDATE TASK
+// STAGE 3: UPDATE TASK (PROTECTED FOR SECURITY)
 // ==========================================
 
 // PUT /tasks/:id
-app.put("/tasks/:id", async (req, res) => {
+app.put("/tasks/:id", authenticateUser, async (req, res) => {
 
-    // Validation
     if (!req.body || !req.body.title || req.body.title.trim() === "") {
         return res.status(400).json({
             message: "Task title is required"
@@ -146,11 +312,11 @@ app.put("/tasks/:id", async (req, res) => {
 });
 
 // ==========================================
-// STAGE 3: DELETE TASK
+// STAGE 3: DELETE TASK (PROTECTED FOR SECURITY)
 // ==========================================
 
 // DELETE /tasks/:id
-app.delete("/tasks/:id", async (req, res) => {
+app.delete("/tasks/:id", authenticateUser, async (req, res) => {
 
     try {
         const task = await db.deleteTask(req.params.id);
@@ -161,7 +327,6 @@ app.delete("/tasks/:id", async (req, res) => {
             });
         }
 
-        // Successful DELETE returns 204 with no response body
         res.status(204).send();
 
     } catch (err) {
