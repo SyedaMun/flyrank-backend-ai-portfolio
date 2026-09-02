@@ -445,7 +445,6 @@ Docker Compose
 
 The earlier `tasks.db` file is retained in the repository as part of the project's database migration history. **PostgreSQL is the current database used by the running application.**
 
-```
 
 ---
 
@@ -507,7 +506,6 @@ openapi.json
 
 The API can be tested through **Postman**, **Swagger UI (`Try it out`)**, and browser GET requests.
 
----
 
 # 🚀 Getting Started
 
@@ -645,7 +643,6 @@ To verify persistence:
 
 This demonstrates that PostgreSQL data persists through application and container restarts because it is stored in the Docker volume.
 
----
 
 # 🧪 Testing
 
@@ -791,7 +788,7 @@ The purpose was not simply to determine which implementation was "better", but t
 
 Testing evidence is documented in the project's Notion knowledge base and includes relevant screenshots, terminal outputs, database verification, Docker status, Git status, and AI-assisted engineering comparison evidence.
 
----
+
 
 # 🎯 Learning Outcomes
 
@@ -910,7 +907,6 @@ This experience has strengthened my understanding of how backend components work
 
 > **Learning principle:** The objective of this internship is not only to complete assignments, but to understand the concepts behind each implementation and build a portfolio that demonstrates practical engineering reasoning.
 
----
 
 # 🧪 Example SQL Query
 
@@ -1039,7 +1035,6 @@ Building practical backend and AI engineering solutions that support education, 
 
 GitHub: [SyedaMun](https://github.com/SyedaMun)
 
----
 
 # 🙏 Acknowledgements
 
