@@ -47,17 +47,18 @@ This repository is maintained as a single, continuously evolving backend enginee
 
 Each assignment extends the existing application rather than creating a completely separate project. This approach demonstrates how the same backend evolves through progressively more advanced engineering concepts, technologies, architecture, testing, documentation, and AI integration.
 
-| Week   | Backend AI Engineering Assignment                   | Status      |
-| ------ | --------------------------------------------------- | ----------- |
+| Week   | Backend AI Engineering Assignment                   | Status       |
+| ------ | --------------------------------------------------- | -------------|
 | Week 2 | BE-01 — Build Your First CRUD API                   | ✅ Completed |
 | Week 3 | BE-02 — Connecting CRUD API to the Database         | ✅ Completed |
 | Week 3 | BE-04 — Containerize Your Stack                     | ✅ Completed |
 | Week 4 | Authentication — Login & Protect                    | ✅ Completed |
-| Week 5 | Connect to an AI API                                | ⏳ Planned   |
-| Week 5 | The Polite Scraper                                  | ⏳ Planned   |
+| Week 5 | The Polite Scraper                                  | ✅ Completed |
 | Week 6 | Your First Background Job                           | ⏳ Planned   |
+| Week 6 | Connect to an AI API                                | ⏳ in process| 
 | Week 7 | Build an AI Decision Flow with React Flow + Inngest | ⏳ Planned   |
 | Week 7 | PDF Report Generator                                | ⏳ Planned   |
+| Week 7 | Your first background job                           | ⏳ Planned   |
 | Week 8 | Backend Capstone Documentation & Case Study         | ⏳ Planned   |
 
 > **10-Week Internship Roadmap:** The internship is a 10-week learning journey. This table records the backend assignments currently identified in the project roadmap and is updated progressively as each assignment is completed. Future assignments and milestones will be added to the repository as the internship progresses.
