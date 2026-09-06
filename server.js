@@ -180,6 +180,12 @@ app.get("/protected/dashboard", authenticateUser, (req, res) => {
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(openapiSpecification));
 
 // ==========================================
+// AI ENGINE INTEGRATION: STAGE 1 ROUTING
+// ==========================================
+const ticketRoutes = require("./src/llm/routes/ticketRoutes");
+app.use(ticketRoutes);
+
+// ==========================================
 // STAGE 2: READ ENDPOINTS (KEEP PUBLIC)
 // ==========================================
 
