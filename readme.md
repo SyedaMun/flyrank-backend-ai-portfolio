@@ -5,7 +5,7 @@
 This repository is maintained across **two parallel internship tracks**:
 
 | Track | Focus | Status |
-|---|---|---|
+| --- | --- | --- |
 | **Track 1: AI Fluency Workspace** | Prompt engineering blueprints, model benchmarking, and AI-assisted development tooling | 🟡 Scaffolded — content to be published as assignments are completed |
 | **Track 2: Backend AI Engineering Workspace** | System architecture, Express.js servers, database layers, validation, containerization, and test evidence | ✅ Active — Weeks 2–6 documented below |
 
@@ -60,10 +60,10 @@ This track is being built in parallel with Track 2 and captures the AI-fluency s
 
 # ⚙️ Track 2: Backend AI Engineering Workspace
 
-## 📋 Assignment Feature & Skills Index
+# 📋 Assignment Feature & Skills Index
 
 | Assignment | Week | Status | Key Features Built | Skills & Tools Used |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | **BE-01 — Build Your First CRUD API** | Week 2 | ✅ Completed | RESTful CRUD endpoints for tasks, JSON request/response handling, route parameters (`:id`), request validation, correct HTTP status codes | Node.js, Express.js, REST API design, JSON, API validation, Postman & Swagger UI testing |
 | **BE-02 — Connecting CRUD API to the Database** | Week 3 | ✅ Completed | SQLite → PostgreSQL migration, PostgreSQL repository / data-access layer, automatic table initialization & seeding, parameterized queries | PostgreSQL, `pg` driver, SQL, parameterized queries, DB Browser for SQLite, repository/data-access pattern |
 | **BE-04 — Containerize Your Stack** | Week 3 | ✅ Completed | Dockerized API + PostgreSQL, Docker Compose orchestration, named persistent volume, verified container-restart persistence | Docker, Dockerfile, Docker Compose, Docker volumes, environment-variable configuration |
@@ -73,7 +73,7 @@ This track is being built in parallel with Track 2 and captures the AI-fluency s
 
 ---
 
-## 🚀 Project Evolution
+# 🚀 Project Evolution
 
 This repository is maintained as a single, continuously evolving backend engineering project throughout the **FlyRank Backend AI Engineering Internship (2026)**.
 
@@ -95,7 +95,7 @@ Each assignment extends the existing application rather than creating a complete
 
 > **10-Week Internship Roadmap:** The internship is a 10-week learning journey. This table records the backend assignments currently identified in the project roadmap and is updated progressively as each assignment is completed. Future assignments and milestones will be added to the repository as the internship progresses.
 
-### Continuous Engineering Approach
+# Continuous Engineering Approach
 
 Rather than treating each assignment as an isolated exercise, this repository preserves the application's engineering history across the internship.
 
@@ -107,11 +107,11 @@ This continuous evolution allows the repository to demonstrate not only individu
 
 ---
 
-## 🏆 Engineering Skills Progression
+# 🏆 Engineering Skills Progression
 
 Throughout this internship, this repository demonstrates progressive backend engineering experience across API development, databases, containerization, testing, documentation, version control, and AI-assisted engineering.
 
-### ✅ Completed Skills
+# ✅ Completed Skills
 
 - ✅ REST API Design
 - ✅ CRUD Operations
@@ -144,7 +144,7 @@ Throughout this internship, this repository demonstrates progressive backend eng
 - ✅ AI-Assisted Development
 - ✅ AI vs Me Implementation Comparison
 
-### ⏳ Upcoming Skills
+# ⏳ Upcoming Skills
 
 As the internship progresses, the same project will be extended to develop additional backend and AI engineering capabilities, including:
 
@@ -161,11 +161,11 @@ As the internship progresses, the same project will be extended to develop addit
 
 ---
 
-## ✨ Features
+# ✨ Features
 
-### Current Features
+# Current Features
 
-#### 🌐 API & Backend
+# 🌐 API & Backend
 
 - ✅ RESTful CRUD API
 - ✅ Node.js backend
@@ -177,7 +177,7 @@ As the internship progresses, the same project will be extended to develop addit
 - ✅ Appropriate HTTP status codes
 - ✅ API debugging and troubleshooting
 
-#### 🗄 Database & Persistence
+# 🗄 Database & Persistence
 
 - ✅ SQLite database integration during the initial database stage
 - ✅ PostgreSQL relational database integration
@@ -190,7 +190,7 @@ As the internship progresses, the same project will be extended to develop addit
 - ✅ Persistent PostgreSQL storage
 - ✅ PostgreSQL data preserved across container restarts
 
-#### 🐳 Docker & Infrastructure
+# 🐳 Docker & Infrastructure
 
 - ✅ Dockerized Node.js / Express API
 - ✅ Dockerized PostgreSQL database
@@ -202,7 +202,7 @@ As the internship progresses, the same project will be extended to develop addit
 - ✅ Verified application and database container startup
 - ✅ Verified database persistence after stack restart
 
-#### 🔐 Configuration & Security
+# 🔐 Configuration & Security
 
 - ✅ Environment-variable based configuration
 - ✅ `.env` for local configuration
@@ -210,7 +210,7 @@ As the internship progresses, the same project will be extended to develop addit
 - ✅ `.env` excluded from version control
 - ✅ Database credentials kept outside committed source code
 
-#### 📚 API Documentation & Testing
+# 📚 API Documentation & Testing
 
 - ✅ OpenAPI 3.0 specification
 - ✅ Interactive Swagger UI documentation
@@ -220,7 +220,7 @@ As the internship progresses, the same project will be extended to develop addit
 - ✅ CRUD endpoint verification
 - ✅ PostgreSQL persistence verification
 
-#### 🧰 Engineering Workflow
+# 🧰 Engineering Workflow
 
 - ✅ Git version control
 - ✅ GitHub repository management
@@ -231,7 +231,7 @@ As the internship progresses, the same project will be extended to develop addit
 - ✅ AI vs Me implementation comparison
 - ✅ Engineering decisions evaluated against an independent AI implementation
 
-#### 🎓 Real-World Project Context
+# 🎓 Real-World Project Context
 
 - ✅ Realistic Navigant Education Consultants task data
 - ✅ Educational and community-oriented workflow examples
@@ -240,10 +240,10 @@ As the internship progresses, the same project will be extended to develop addit
 
 ---
 
-## 🛠 Technology Stack
+# 🛠 Technology Stack
 
 | Technology | Purpose |
-|---|---|
+| --- | --- |
 | **Node.js** | JavaScript runtime for the backend application |
 | **Express.js** | Backend web framework for building the REST API |
 | **JavaScript** | Primary programming language |
@@ -274,9 +274,9 @@ As the internship progresses, the same project will be extended to develop addit
 
 ---
 
-## 🧩 BE-01 — Build Your First CRUD API *(Week 2)*
+# 🧩 BE-01 — Build Your First CRUD API *(Week 2)*
 
-### 🔗 API Endpoints
+# 🔗 API Endpoints
 
 The Task Management API exposes RESTful CRUD endpoints for creating, reading, updating, and deleting task records stored in PostgreSQL.
 
@@ -289,7 +289,7 @@ The Task Management API exposes RESTful CRUD endpoints for creating, reading, up
 | `DELETE` | `/tasks/:id` | Delete an existing task               | `204 No Content`  |
 | `GET`    | `/docs`      | Interactive Swagger UI documentation  | `200 OK`          |
 
-#### Validation & Error Responses
+# Validation & Error Responses
 
 The API also handles common invalid requests and missing resources:
 
@@ -300,7 +300,7 @@ The API also handles common invalid requests and missing resources:
 | Unknown task ID during `PUT`       | `404 Not Found`    |
 | Unknown task ID during `DELETE`    | `404 Not Found`    |
 
-#### API Base URL
+# API Base URL
 
 When the Dockerized application is running:
 
@@ -308,7 +308,7 @@ When the Dockerized application is running:
 http://localhost:3000
 ```
 
-#### Example Endpoints
+# Example Endpoints
 
 ```text
 GET    http://localhost:3000/tasks
@@ -318,7 +318,7 @@ PUT    http://localhost:3000/tasks/1
 DELETE http://localhost:3000/tasks/1
 ```
 
-#### API Documentation
+# API Documentation
 
 Interactive Swagger UI is available at:
 
@@ -336,9 +336,9 @@ The API can be tested through **Postman**, **Swagger UI (`Try it out`)**, and br
 
 ---
 
-## 🗄️ BE-02 — Connecting CRUD API to the Database *(Week 3)*
+# 🗄️ BE-02 — Connecting CRUD API to the Database *(Week 3)*
 
-### Database Evolution
+# Database Evolution
 
 This project demonstrates the evolution of the application's data layer during the **FlyRank Backend AI Engineering Internship (2026)**.
 
@@ -346,7 +346,7 @@ The application initially used **SQLite** as a lightweight persistent database d
 
 This progression demonstrates an important backend engineering principle: the application can evolve from a simple local database implementation toward a client-server relational database without changing the core purpose of the API.
 
-#### Phase 1 — SQLite
+# Phase 1 — SQLite
 
 SQLite was used during the initial database integration stage because it is lightweight, serverless, easy to configure, and well suited to learning relational database concepts in a local development environment.
 
@@ -377,7 +377,7 @@ During the SQLite stage, the application automatically:
 - Created the `tasks` table if it did not exist.
 - Seeded three default tasks when the table was empty.
 
-#### Phase 2 — PostgreSQL
+# Phase 2 — PostgreSQL
 
 As the project progressed, SQLite was replaced by **PostgreSQL** to introduce a more realistic client-server relational database architecture and prepare the application for containerized development.
 
@@ -475,7 +475,7 @@ Persistent PostgreSQL storage
 
 This progression provided practical experience in replacing a local database implementation with a more production-oriented database while preserving the application's core CRUD functionality.
 
-### 🧪 Example SQL Query
+# 🧪 Example SQL Query
 
 SQL was used throughout the database stages of the project to inspect, verify, and work with task records.
 
@@ -537,7 +537,7 @@ SQL Query
 
 The database technology changed as the architecture evolved, while the core task-management data model and CRUD purpose remained consistent.
 
-### 📸 Database Screenshot
+# 📸 Database Screenshot
 
 The current application uses **PostgreSQL** as its persistent database and runs PostgreSQL inside Docker.
 
@@ -582,9 +582,9 @@ The project previously used SQLite during BE-02. The following screenshot docume
 
 ---
 
-## 🐳 BE-04 — Containerize Your Stack *(Week 3)*
+# 🐳 BE-04 — Containerize Your Stack *(Week 3)*
 
-### 📂 Project Structure
+# 📂 Project Structure
 
 ```text
 flyrank-crud-api/
@@ -605,7 +605,7 @@ flyrank-crud-api/
 **Key Files**
 
 | File | Purpose |
-|---|---|
+| --- | --- |
 | `server.js` | Main Node.js / Express application and API routes |
 | `database.js` | PostgreSQL database connection, table initialization, seeding, and database access logic |
 | `openapi.json` | OpenAPI 3.0 specification for the REST API |
@@ -636,7 +636,7 @@ Docker Compose
 
 The earlier `tasks.db` file is retained in the repository as part of the project's database migration history. **PostgreSQL is the current database used by the running application.**
 
-### 🚀 Getting Started
+# 🚀 Getting Started
 
 **Prerequisites**
 
@@ -774,9 +774,9 @@ This demonstrates that PostgreSQL data persists through application and containe
 
 ---
 
-## 🔐 Authentication — Login & Protect (BE-03) *(Week 4)*
+# 🔐 Authentication — Login & Protect (BE-03) *(Week 4)*
 
-### Authentication Infrastructure (Week 4 / BE-03 Update)
+# Authentication Infrastructure (Week 4 / BE-03 Update)
 
 The Task Management Engine features a modular token-based authentication subsystem leveraging the Supabase identity platform layer. Secure endpoints are guarded utilizing custom interceptive route middleware patterns.
 
@@ -790,7 +790,7 @@ The Task Management Engine features a modular token-based authentication subsyst
 
 ---
 
-## 🕸️ BE-05 — The Polite Scraper *(Week 5)*
+# 🕸️ BE-05 — The Polite Scraper *(Week 5)*
 
 A rate-limited, "polite" scraping pipeline was built on top of the existing backend to collect and structure book-catalog data end-to-end — from raw HTML collection through to a finished report artifact.
 
@@ -807,7 +807,7 @@ A rate-limited, "polite" scraping pipeline was built on top of the existing back
 
 ---
 
-## 🤖 AI Engine Integration (Week 6 / BE-07 Update)
+# 🤖 AI Engine Integration (Week 6 / BE-07 Update)
 
 **BE-07 — Put an LLM Behind Your API** is currently in progress, bringing the first live LLM connectivity into the backend stack.
 
@@ -823,11 +823,11 @@ A rate-limited, "polite" scraping pipeline was built on top of the existing back
 
 ---
 
-## 🧪 Testing
+# 🧪 Testing
 
 The project has been tested progressively throughout the internship as new backend capabilities were introduced.
 
-### API Testing
+# API Testing
 
 The REST API was tested using:
 
@@ -843,7 +843,7 @@ The CRUD operations were verified for:
 - `PUT /tasks/:id`
 - `DELETE /tasks/:id`
 
-### Validation & Error Testing
+# Validation & Error Testing
 
 The API was also tested against invalid and missing data, including:
 
@@ -860,7 +860,7 @@ Expected HTTP responses were verified, including:
 - `200 OK`
 - `204 No Content`
 
-### Database Testing
+# Database Testing
 
 Database behavior was verified during both the SQLite and PostgreSQL stages.
 
@@ -922,7 +922,7 @@ Docker Compose
     └── PostgreSQL
 ```
 
-### Persistence Testing
+# Persistence Testing
 
 Database persistence was explicitly tested by:
 
@@ -935,7 +935,7 @@ Database persistence was explicitly tested by:
 
 This verified that the PostgreSQL Docker volume was providing persistent storage rather than temporary container storage.
 
-### Configuration Testing
+# Configuration Testing
 
 Environment configuration was verified using:
 
@@ -945,7 +945,7 @@ Environment configuration was verified using:
 
 The actual `.env` file remains local and is not committed to GitHub.
 
-### AI-Assisted Testing & Comparison
+# AI-Assisted Testing & Comparison
 
 During Stage 6, the implemented solution was also compared with an independently generated AI implementation.
 
@@ -963,13 +963,13 @@ The comparison examined areas including:
 
 The purpose was not simply to determine which implementation was "better", but to evaluate the differences and use AI as an engineering review and learning tool.
 
-### Testing Evidence
+# Testing Evidence
 
 Testing evidence is documented in the project's Notion knowledge base and includes relevant screenshots, terminal outputs, database verification, Docker status, Git status, and AI-assisted engineering comparison evidence.
 
 ---
 
-## 🎯 Learning Outcomes
+# 🎯 Learning Outcomes
 
 Through the progressive development of this project during the **FlyRank Backend AI Engineering Internship (2026)**, I have developed practical experience in the following areas:
 
@@ -987,7 +987,7 @@ Through the progressive development of this project during the **FlyRank Backend
 - API error handling
 - API debugging and troubleshooting
 
-### Database Engineering
+# Database Engineering
 
 - Relational database concepts
 - SQL queries
@@ -1001,7 +1001,7 @@ Through the progressive development of this project during the **FlyRank Backend
 - Database verification and inspection
 - Migration from a lightweight local database to PostgreSQL
 
-### Docker & Infrastructure
+# Docker & Infrastructure
 
 - Docker fundamentals
 - Writing a Dockerfile
@@ -1015,7 +1015,7 @@ Through the progressive development of this project during the **FlyRank Backend
 - Starting and managing a complete backend stack with one command
 - Verifying application and database containers
 
-### API Documentation & Testing
+# API Documentation & Testing
 
 - OpenAPI 3.0
 - Swagger UI
@@ -1026,7 +1026,7 @@ Through the progressive development of this project during the **FlyRank Backend
 - Testing expected error responses
 - Evidence-based technical documentation
 
-### Configuration & Security
+# Configuration & Security
 
 - Environment variables
 - `.env` configuration
@@ -1035,7 +1035,7 @@ Through the progressive development of this project during the **FlyRank Backend
 - Keeping local credentials outside the public repository
 - Understanding the difference between configuration and source code
 
-### Version Control & Professional Workflow
+# Version Control & Professional Workflow
 
 - Git version control
 - Git staging and commits
@@ -1047,7 +1047,7 @@ Through the progressive development of this project during the **FlyRank Backend
 - README documentation
 - Portfolio-oriented project organization
 
-### AI-Assisted Engineering
+# AI-Assisted Engineering
 
 - Using AI as a development and learning assistant
 - Breaking backend tasks into smaller engineering stages
@@ -1058,7 +1058,7 @@ Through the progressive development of this project during the **FlyRank Backend
 - Improving prompts based on implementation results
 - Using AI to support engineering reasoning rather than simply copying generated code
 
-### Engineering Mindset
+# Engineering Mindset
 
 The most important outcome of this project is learning how to **evolve an existing backend system rather than repeatedly building isolated examples**.
 
