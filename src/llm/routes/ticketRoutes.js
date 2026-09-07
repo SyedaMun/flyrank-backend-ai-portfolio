@@ -10,31 +10,96 @@ const router = Router();
 const client = new OpenAI({
   baseURL: process.env.LLM_BASE_URL,
   apiKey: process.env.LLM_API_KEY,
-  timeout: 30000,   // Strict 30s connection ceiling (Stage 4)
-  maxRetries: 0,    // We turn off silent library defaults to run our own logic loop
+  timeout: 30000, // Strict 30s connection ceiling (Stage 4)
+  maxRetries: 0,  // Disable library defaults so we manage our own manual loop
 });
+
+const MAX_ATTEMPTS = 3;
+const BASE_DELAY_MS = 500;
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function isNonRetryable(err) {
+  const status = err?.status;
+  return status === 400 || status === 401 || status === 403;
+}
+
+function isRetryable(err) {
+  const status = err?.status;
+  if (status === 429) return true;
+  if (typeof status === "number" && status >= 500 && status < 600) return true;
+  if (err instanceof OpenAI.APIConnectionError) return true;
+  if (status === undefined && err?.code) return true; // Catch ENOTFOUND / connection drops
+  return false;
+}
+
+async function callLLMWithRetry(chatMessages, temperature) {
+  let lastError;
+
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+    console.log(`🤖 [Attempt ${attempt}/${MAX_ATTEMPTS}] Calling model: ${process.env.LLM_MODEL}...`);
+    try {
+      const response = await client.chat.completions.create({
+        model: process.env.LLM_MODEL || "openrouter/free",
+        temperature,
+        messages: chatMessages,
+      });
+
+      // ====================================================================
+      // CLAUDE'S SHAPE GUARD: Intercept non-AI malformed successful responses
+      // ====================================================================
+      if (!response?.choices?.[0]?.message) {
+        const shapeError = new Error(
+          "LLM response did not contain the expected 'choices' structure — check LLM_BASE_URL / LLM_MODEL."
+        );
+        shapeError.status = 502; // Treat it as a bad gateway error to run retries
+        throw shapeError;
+      }
+
+      return response;
+    } catch (err) {
+      lastError = err;
+
+      if (isNonRetryable(err)) {
+        console.log(`❌ [Attempt ${attempt}/${MAX_ATTEMPTS}] Non-retryable error ${err.status}, aborting.`);
+        throw err;
+      }
+
+      if (isRetryable(err) && attempt < MAX_ATTEMPTS) {
+        const backoffMs = BASE_DELAY_MS * 2 ** (attempt - 1);
+        console.log(
+          `🔁 [Attempt ${attempt}/${MAX_ATTEMPTS}] Retryable error (${err.status ?? err.code}), backing off ${backoffMs}ms...`
+        );
+        await sleep(backoffMs);
+        continue;
+      }
+
+      console.log(`❌ [Attempt ${attempt}/${MAX_ATTEMPTS}] Giving up: ${err.message}`);
+      throw err;
+    }
+  }
+
+  throw lastError;
+}
 
 /**
  * Helper function to strip markdown code blocks/fences from LLM outputs (Stage 3)
  */
 function cleanJsonString(rawText) {
   let cleanText = rawText.trim();
-  // Strip opening markdown tags if present (```json or ```)
   if (cleanText.startsWith("```")) {
     cleanText = cleanText.replace(/^```(?:json)?\n?/i, "");
   }
-  // Strip closing markdown tags if present (```)
   if (cleanText.endsWith("```")) {
     cleanText = cleanText.slice(0, -3);
   }
   return cleanText.trim();
 }
 
-// Helper wrapper to execute delay wait loops inside our backoff engine loop (Stage 4)
-const delayTime = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
 router.post("/tickets/classify", async (req, res, next) => {
-  const startTime = Date.now(); // Track exact process baseline for cost logs
+  const startTime = Date.now(); // Track process baseline for performance cost logs
   try {
     // 1. Run Input Validation via Zod schema (Gate check to avoid burning quota)
     const parseResult = ticketClassifySchema.safeParse(req.body);
@@ -46,7 +111,7 @@ router.post("/tickets/classify", async (req, res, next) => {
       });
     }
 
-    // 2. Fallback LLM Stub Mock Mode (Stage 1 Core Mode)
+    // 2. Fallback LLM Stub Mock Mode (Stage 1)
     if (process.env.LLM_STUB === "1") {
       console.log("⚡ [LLM_STUB] Mock mode active.");
       return res.status(200).json({
@@ -58,9 +123,7 @@ router.post("/tickets/classify", async (req, res, next) => {
       });
     }
 
-    // ====================================================================
-    // STAGE 4: ADMINISTRATIVE KILL SWITCH ROUTING
-    // ====================================================================
+    // 3. Administrative Kill Switch Gate Routing (Stage 4)
     if (process.env.LLM_ENABLED === "false") {
       console.log("🛑 [KILL SWITCH] LLM_ENABLED flag is false. Diverting to safe deterministic fallback.");
       const textLength = parseResult.data.text.length;
@@ -82,60 +145,14 @@ router.post("/tickets/classify", async (req, res, next) => {
       { role: "user", content: parseResult.data.text }
     ];
 
-    let response = null;
-    let attempts = 0;
-    const maxAttempts = 3;
-    let currentWaitDelay = 1000; // Starting baseline delay of 1 second
-
-    // ====================================================================
-    // STAGE 4: EXPONENTIAL BACKOFF RETRY ENGINE WITH JITTER
-    // ====================================================================
-    while (attempts < maxAttempts) {
-      try {
-        attempts++;
-        console.log(`🤖 [Attempt ${attempts}/${maxAttempts}] Calling model: ${process.env.LLM_MODEL || "openrouter/free"}...`);
-        
-        response = await client.chat.completions.create({
-          model: process.env.LLM_MODEL || "openrouter/free",
-          temperature: 0.2,
-          messages: chatMessages,
-        });
-
-        // Break loop immediately on a successful, clean completion path
-        break; 
-      } catch (clientError) {
-        const networkStatusCode = clientError.status;
-        console.warn(`⚠️ Network exception on execution attempt ${attempts}: ${clientError.message}`);
-
-        // STAGE 4 MANDATE: Never retry on 400, 401 (bad credentials), or 403 authorization lockouts.
-        if (networkStatusCode === 400 || networkStatusCode === 401 || networkStatusCode === 403) {
-          console.error("❌ Unrecoverable interaction exception. Aborting retry engine immediately.");
-          return res.status(networkStatusCode || 500).json({
-            error: "Authentication/Client Error",
-            message: "Unrecoverable platform interaction exception.",
-            details: clientError.message
-          });
-        }
-
-        if (attempts >= maxAttempts) {
-          console.error("❌ Maximum configured backoff limit bounds exhausted.");
-          throw clientError; // Pass error down to our final catch block
-        }
-
-        // Apply backoff scaling formula with random jitter mitigation (1s, 2s, 4s)
-        const randomJitter = Math.random() * 300;
-        const totalSleepWindow = currentWaitDelay * Math.pow(2, attempts - 1) + randomJitter;
-        console.log(`⏳ Retry engine backing off for ${Math.round(totalSleepWindow)}ms...`);
-        await delayTime(totalSleepWindow);
-      }
-    }
+    // Call live AI wrapped inside our robust retry handler shell
+    let response = await callLLMWithRetry(chatMessages, 0.2);
 
     let rawAiOutput = response.choices[0].message.content;
     let cleanText = cleanJsonString(rawAiOutput);
     let finalJsonObject = null;
     let schemaValidationPassed = false;
 
-    // Stage 3 JSON Schema Verification Routine
     try {
       finalJsonObject = JSON.parse(cleanText);
       const allowedCategories = ["billing", "bug", "feature", "other"];
@@ -158,28 +175,20 @@ router.post("/tickets/classify", async (req, res, next) => {
     // ====================================================================
     if (!schemaValidationPassed) {
       console.log("🔄 [Repair Loop] Initiating single correction attempt...");
-      
-      // Add the mistake and instructions to the message history stack
+
       chatMessages.push({ role: "assistant", content: rawAiOutput });
       chatMessages.push({
         role: "user",
         content: "Your previous answer was rejected because it failed to parse into valid schema-constrained JSON text. Please review the output rules, fix the structure, and return ONLY a single corrected JSON object matching the requested schema fields."
       });
 
-      // Execute the single corrective repair call
-      response = await client.chat.completions.create({
-        model: process.env.LLM_MODEL || "openrouter/free",
-        temperature: 0.0, // Force strict accuracy for corrections
-        messages: chatMessages,
-      });
+      response = await callLLMWithRetry(chatMessages, 0.0);
 
       rawAiOutput = response.choices[0].message.content;
       cleanText = cleanJsonString(rawAiOutput);
-      
+
       try {
         finalJsonObject = JSON.parse(cleanText);
-        
-        // Final structural check on the repair attempt output
         const allowedCategories = ["billing", "bug", "feature", "other"];
         const allowedUrgencies = ["low", "normal", "high"];
 
@@ -190,12 +199,8 @@ router.post("/tickets/classify", async (req, res, next) => {
         ) {
           throw new Error("Repair output still fails strict enum criteria constraints.");
         }
-        
       } catch (retryParseError) {
-        // If it fails a second time, return 422 Unprocessable Entity
         console.error("❌ [Stage 3 Failure] Model could not repair its output format structure.");
-        
-        // STAGE 3 MANDATE: Write quarantine log on terminal failure
         console.warn(`⚠️ [QUARANTINE LOG] Data isolated due to persistent schema violation. Raw text: "${rawAiOutput}"`);
 
         return res.status(422).json({
@@ -207,24 +212,36 @@ router.post("/tickets/classify", async (req, res, next) => {
     }
 
     // ====================================================================
-    // STAGE 4: METRIC OBSERVE COST LOG STRUCT ENGINE
+    // STAGE 4: METRIC OBSERVE COST LOG ENGINE
     // ====================================================================
     const durationMs = Date.now() - startTime;
     console.log(
       `📊 [COST LOG] Prompt Version: v1 | Model: ${process.env.LLM_MODEL || "openrouter/free"} | Duration: ${durationMs}ms`
     );
+
     console.log("✅ Output verified successfully. Dispatching JSON structure payload.");
     return res.status(200).json(finalJsonObject);
 
   } catch (error) {
-    // STAGE 4 MANDATE: Capture explicit client connection timeouts gracefully
-    if (error.message && (error.message.includes("timeout") || error.message.includes("timed out"))) {
-      console.error("❌ Connection link expired on external network interface layer transaction.");
-      return res.status(504).json({ 
-        error: "Gateway Timeout", 
-        message: "The external model request connection timed out after 30 seconds." 
+    // Separate unclassified operational errors from structured LLM/network failures
+    if (isNonRetryable(error)) {
+      console.error(`❌ LLM rejected request (${error.status}):`, error.message);
+      return res.status(error.status).json({
+        error: "LLM Request Rejected",
+        status: error.status,
+        message: error.message,
       });
     }
+
+    if (isRetryable(error) || error instanceof OpenAI.APIConnectionError || error.status === 502) {
+      console.error("❌ Upstream LLM unreachable after retries:", error.message);
+      return res.status(504).json({
+        error: "Gateway Timeout",
+        message: "The external model request connection timed out or encountered a persistent upstream network error.",
+        details: error.message
+      });
+    }
+
     console.error("❌ Runtime exception thrown:", error.message);
     next(error);
   }

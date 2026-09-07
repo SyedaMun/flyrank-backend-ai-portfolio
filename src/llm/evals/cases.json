@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "input": "Hey! Your app crashed when I tried to pay, and it took my money! Fix this now!",
+    "expected_category": "bug"
+  },
+  {
+    "id": 2,
+    "input": "Can I get an invoice or a downloadable receipt for my company subscription transaction?",
+    "expected_category": "billing"
+  },
+  {
+    "id": 3,
+    "input": "It would be amazing if you could add a dark mode toggle button into the top user settings bar.",
+    "expected_category": "feature"
+  },
+  {
+    "id": 4,
+    "input": "Just wanted to say thank you for building this product! The software speeds up my daily workflow beautifully.",
+    "expected_category": "other"
+  },
+  {
+    "id": 5,
+    "input": "My account shows double billing deductions for the month of February. Please review my account logs.",
+    "expected_category": "billing"
+  },
+  {
+    "id": 6,
+    "input": "Whenever I click the upload file profile icon, the browser freeze-locks completely and shuts down.",
+    "expected_category": "bug"
+  },
+  {
+    "id": 7,
+    "input": "Can you integrate a downloadable CSV export spreadsheet utility inside the core metric data graphs screen?",
+    "expected_category": "feature"
+  },
+  {
+    "id": 8,
+    "input": "Hello, is anyone online right now? I need to ask a general question about your corporate platform layout.",
+    "expected_category": "other"
+  }
+]
