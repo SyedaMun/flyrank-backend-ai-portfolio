@@ -87,11 +87,11 @@ Each assignment extends the existing application rather than creating a complete
 | Week 4 | Authentication — Login & Protect                       | ✅ Completed   |
 | Week 5 | The Polite Scraper                                     | ✅ Completed   |
 | Week 6 | Your First Background Job                              | ⏳ Planned     |
-| Week 6 | Connect to an AI API                                   | ⏳ In Progress |
-| Week 7 | Build an AI Decision Flow with React Flow + Inngest     | ⏳ Planned     |
-| Week 7 | PDF Report Generator                                    | ⏳ Planned     |
-| Week 7 | Your first background job                               | ⏳ Planned     |
-| Week 8 | Backend Capstone Documentation & Case Study             | ⏳ Planned     |
+| Week 6 | Connect to an AI API                                   |  ✅ Completed  |
+| Week 7 | Build an AI Decision Flow with React Flow + Inngest    | ⏳ Planned     |
+| Week 7 | PDF Report Generator                                   | ⏳ Planned     |
+| Week 7 | Your first background job                              | ⏳ Planned     |
+| Week 8 | Backend Capstone Documentation & Case Study            | ⏳ Planned     |
 
 > **10-Week Internship Roadmap:** The internship is a 10-week learning journey. This table records the backend assignments currently identified in the project roadmap and is updated progressively as each assignment is completed. Future assignments and milestones will be added to the repository as the internship progresses.
 
@@ -1132,6 +1132,7 @@ Backend AI Engineering Intern — FlyRank AI Internship (2026)
 Building practical backend and AI engineering solutions that support education, career development, and digital empowerment.
 
 GitHub: [SyedaMun](https://github.com/SyedaMun)
+* **Portfolio:** [syeda-munazza-bukhari-portfolio.netlify.app](https://syeda-munazza-bukhari-portfolio.netlify.app/)
 
 ---
 
