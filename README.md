@@ -1131,7 +1131,7 @@ Backend AI Engineering Intern — FlyRank AI Internship (2026)
 
 Building practical backend and AI engineering solutions that support education, career development, and digital empowerment.
 
-GitHub: [SyedaMun](https://github.com/SyedaMun)
+* **GitHub:** [SyedaMun](https://github.com/SyedaMun)
 * **Portfolio:** [syeda-munazza-bukhari-portfolio.netlify.app](https://syeda-munazza-bukhari-portfolio.netlify.app/)
 
 ---
